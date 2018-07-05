@@ -1,16 +1,13 @@
 <template>
-  <div class="home">
-    <List></List>
-  </div>
+  <layout></layout>
 </template>
 
 <script>
-import List from '@/components/Board/List.vue'
-
+import Layout from '../components/common/Layout.vue'
 export default {
   name: 'index',
   components: {
-    List
+    Layout
   }
 }
 </script>

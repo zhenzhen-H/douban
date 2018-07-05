@@ -1,11 +1,11 @@
 <template>
   <div id="">
-    list
+    search
   </div>
 </template>
 <script>
 export default {
-  name: "List",
+  name: "Search",
   data: () => ({
 
   })
