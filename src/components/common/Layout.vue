@@ -13,6 +13,7 @@
 </template>
 
 <script>
+import {Tabbar, TabItem} from 'mint-ui'
 export default {
   name: 'layout',
   data() {
@@ -39,6 +40,10 @@ export default {
         }
       ]
     }
+  },
+  components: {
+    [Tabbar.name]: Tabbar,
+    [TabItem.name]: TabItem
   },
   methods: {
     handleTabClick(path) {

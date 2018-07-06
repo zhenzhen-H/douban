@@ -4,11 +4,14 @@
       :isImgExpand="false"
       :isShowButton="false"
     ></swiper>
+    <list />
   </div>
 </template>
 <script>
 import Swiper from '../common/Swiper.vue'
+import List from './List.vue'
 export default {
+  name: 'Board',
   data() {
     return {
 
@@ -16,7 +19,8 @@ export default {
   },
   methods: {},
   components: {
-    Swiper
+    Swiper,
+    List
   },
   mounted() {
 

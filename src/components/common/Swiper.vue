@@ -10,6 +10,7 @@
 </template>
 <script>
   import $ from 'axios'
+  import {Swipe, SwipeItem, Button} from 'mint-ui'
   export default {
     props: {
       isShowButton: {
@@ -29,6 +30,11 @@
       return {
         items: []
       }
+    },
+    components: {
+      [Swipe.name]: Swipe,
+      [SwipeItem.name]: SwipeItem,
+      [Button.name]: Button
     },
     methods: {
       handleBtnClick() {
