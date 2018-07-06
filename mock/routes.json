@@ -1,0 +1,5 @@
+{
+  "/v2/movie/in_theaters": "/movielist",
+  "/v2/movie/coming_soon": "/movielist",
+  "/v2/movie/top250": "/movielist"
+}

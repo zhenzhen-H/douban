@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <mt-swipe :auto="0" :continuous="false">
+    <mt-swipe :auto="0" :continuous="loop">
       <mt-swipe-item v-for="(item, index) of items" :key="index">
         <img :src="item.images.large" :class="{imgHeight: isImgExpand}">
         <mt-button @click="handleBtnClick" v-if="(index == items.length - 1) && isShowButton" :plain="true">开始体验</mt-button>
@@ -24,6 +24,10 @@
       isImgExpand: {
         type: Boolean,
         required: true
+      },
+      loop: {
+        type: Boolean,
+        default: true
       }
     },
     data() {
@@ -44,7 +48,8 @@
       }
     },
     mounted() {
-      $.get('/v2/movie/in_theaters?count=' + this.imgCount)
+      // $.get('/v2/movie/in_theaters?count=' + this.imgCount)
+      $.get('/v2/movie/in_theaters')
         .then((result) => {
           this.items = result.data.subjects
         })

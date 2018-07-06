@@ -51,7 +51,13 @@ export default {
         path
       })
     }
-  }
+  },
+  mounted() {    
+    
+  },
+  updated() {
+    
+  },
 }
 </script>
 
@@ -69,6 +75,7 @@ export default {
     @include flex-direction(column);
     > div:first-child {
       @include flex();
+      overflow: hidden;
       width: 100%;
     }
     > div:last-child {
