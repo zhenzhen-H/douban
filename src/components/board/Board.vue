@@ -6,6 +6,7 @@
           :isImgExpand="false"
           :isShowButton="false"
           :loop="true"
+          :imgCount="5"
         ></swiper>
       </div>
       <list />

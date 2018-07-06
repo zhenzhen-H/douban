@@ -1,6 +1,6 @@
 <template>
   <swiper
-    :imgCount="6"
+    :imgCount="3"
     :isImgExpand="true"
     :isShowButton="true"
     :loop="false"

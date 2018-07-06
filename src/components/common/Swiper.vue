@@ -48,8 +48,7 @@
       }
     },
     mounted() {
-      // $.get('/v2/movie/in_theaters?count=' + this.imgCount)
-      $.get('/v2/movie/in_theaters')
+      $.get('/v2/movie/in_theaters?count=' + this.imgCount)
         .then((result) => {
           this.items = result.data.subjects
         })
