@@ -1,13 +1,13 @@
 <template>
   <div class="list-container">
     <div v-if="!isShowLoading">
-      <h3 @click="handleClick()">
+      <h3 @click="handleTitleClick()">
         <span>{{title}}</span>
         <span class="yo-ico">&#xf07f;</span>
       </h3>
       <div :id="`list-scroll-${scrollId}`">
         <div>
-          <figure v-for="(movie) of movielist" :key="movie.id">
+          <figure v-for="(movie) of movielist" :key="movie.id" @click="handleItemClick(movie.id)">
             <img :src="movie.images.large" width="90" height="125" />
             <figcaption>{{movie.title}}</figcaption>
           </figure>
@@ -44,12 +44,19 @@ export default {
     genRandom() {
       return new Date().getTime() + Math.ceil(Math.random() * 1000)
     },
-    handleClick() {
-      console.log(0);
+    handleTitleClick() {
       this.$router.push({
         name: 'lists',
         query: {
           uri: this.movietype
+        }
+      })
+    },
+    handleItemClick(id) {
+      this.$router.push({
+        name: 'detail',
+        query: {
+          id
         }
       })
     }

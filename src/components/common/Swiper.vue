@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <mt-swipe :auto="0" :continuous="loop" v-show="!isShowLoading">
-      <mt-swipe-item v-for="(item, index) of items" :key="index">
+      <mt-swipe-item v-for="(item, index) of items" :key="index" @click.native="handleImgClick(item.id)">
         <img :src="item.images.large" :class="{imgHeight: isImgExpand}">
         <mt-button @click="handleBtnClick" v-if="(index == items.length - 1) && isShowButton" :plain="true">开始体验</mt-button>
       </mt-swipe-item>
@@ -31,6 +31,10 @@
       loop: {
         type: Boolean,
         default: true
+      },
+      enableClick: {
+        type: Boolean,
+        required: true
       }
     },
     data() {
@@ -50,6 +54,16 @@
         this.$router.replace({
           name: 'index'
         })
+      },
+      handleImgClick(id) {
+        if (this.enableClick) {
+          this.$router.push({
+            name: 'detail',
+            query: {
+              id
+            }
+          })
+        }
       }
     },
     mounted() {

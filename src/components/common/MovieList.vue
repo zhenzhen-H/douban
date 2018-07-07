@@ -1,22 +1,24 @@
 <template>
   <div class="movielist-container">
     <mt-loadmore v-show="isShowList" :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" ref="loadmore">
-      <section v-for="v of movielist" :key="v.id">
-        <div>
-          <img :src="v.images.small" alt="">
-        </div>
-        <div>
-          <h1>{{v.title}}</h1>
-          <h5>{{v.original_title}}</h5>
-          <h3>
-            导演：
-            <span v-for="d of v.directors" :key="d.id">{{d.name}}</span>
-          </h3>
-        </div>
-        <div>
-          <mt-badge type="error">10</mt-badge>
-        </div>
-      </section>
+      <div :style="wrapperHeight">
+        <section v-for="v of movielist" :key="v.id">
+          <div>
+            <img :src="v.images.small" alt="">
+          </div>
+          <div @click="handleClick(v.id)">
+            <h1>{{v.title}}</h1>
+            <h5>{{v.original_title}}</h5>
+            <h3>
+              导演：
+              <span v-for="d of v.directors" :key="d.id">{{d.name}}</span>
+            </h3>
+          </div>
+          <div>
+            <mt-badge type="error">10</mt-badge>
+          </div>
+        </section>
+      </div>
     </mt-loadmore>
   </div>
 </template>
@@ -28,7 +30,12 @@ export default {
   data: () => ({
     movielist: [],
     allLoaded: false,
-    isShowList: false
+    isShowList: false,
+    wrapperHeight: {
+      // 由于首屏数据加载是动态的，因此需要保证在mt-loadmore组件内部要有个初始化的高度
+      // 高度需要使用DOM重新计算
+      'min-height': window.innerHeight + 'px'
+    }
   }),
   components: {
     [Badge.name]: Badge,
@@ -44,14 +51,24 @@ export default {
         })
     },
     loadBottom() {
-      console.log(9);
-      // $.get('/v2/movie/' + this.movietype + '?start=' + this.start + '&count=2')
-      //   .then(result => {
-      //     this.movielist.push(...result.data.subjects)
-      //     this.$refs.loadmore.onBottomLoaded()
-      //     this.start += 2
-      //   })
+      $.get('/v2/movie/' + this.movietype + '?start=' + this.start + '&count=2')
+        .then(result => {
+          this.movielist.push(...result.data.subjects)
+          this.$refs.loadmore.onBottomLoaded()
+          this.start += 2
+        })
+    },
+    handleClick(id) {
+      this.$router.push({
+        name: 'detail',
+        query: {
+          id
+        }
+      })
     }
+  },
+  created() {
+
   },
   mounted() {
     this.start = 21
@@ -73,10 +90,9 @@ export default {
 @import '@/style/usage/core/reset.scss';
 .movielist-container {
   height: 100%;
+  overflow: scroll;
   background: #fff;
   .mint-loadmore {
-    height: 100%;
-    overflow-y: scroll;
     section {
       height: 1.04rem;
       padding: .1rem .2rem;

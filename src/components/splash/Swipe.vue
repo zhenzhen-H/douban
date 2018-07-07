@@ -4,6 +4,7 @@
     :isImgExpand="true"
     :isShowButton="true"
     :loop="false"
+    :enableClick="false"
   ></swiper>
 </template>
 <script>
