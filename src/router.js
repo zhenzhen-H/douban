@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Splash from './views/Splash.vue'
 import Index from './views/Index.vue'
+import Lists from './views/Lists.vue'
 
 import Board from './components/board/Board.vue'
 import Search from './components/search/Search.vue'
@@ -42,6 +43,11 @@ export default new Router({
           component: Profile
         }
       ]
+    },
+    {
+      path: '/lists',
+      name: 'lists',
+      component: Lists
     }
   ]
 })

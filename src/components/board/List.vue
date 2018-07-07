@@ -1,17 +1,17 @@
 <template>
   <div>
-    <movie-list movietype="in_theaters" />
-    <movie-list movietype="coming_soon" />
-    <!-- <movie-list movietype="new_movies" /> -->
-    <movie-list movietype="top250" />
+    <board-list movietype="in_theaters" />
+    <board-list movietype="coming_soon" />
+    <!-- <board-list movietype="new_movies" /> -->
+    <board-list movietype="top250" />
   </div>
 </template>
 <script>
-import MovieList from '../common/MovieList.vue'
+import BoardList from '../common/BoardList.vue'
 export default {
   name: "list",
   components: {
-    MovieList
+    BoardList
   }
 }
 </script>

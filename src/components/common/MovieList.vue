@@ -1,123 +1,122 @@
 <template>
-  <div class="list-container">
-    <div v-if="!isShowLoading">
-      <h3>{{title}}</h3>
-      <div :id="`list-scroll-${scrollId}`">
+  <div class="movielist-container">
+    <mt-loadmore v-show="isShowList" :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" ref="loadmore">
+      <section v-for="v of movielist" :key="v.id">
         <div>
-          <figure v-for="(movie) of movielist" :key="movie.id">
-            <img :src="movie.images.large" width="90" height="125" />
-            <figcaption>{{movie.title}}</figcaption>
-          </figure>
+          <img :src="v.images.small" alt="">
         </div>
-      </div>
-    </div>
-    <div v-if="isShowLoading" class="spinner">
-      <mt-spinner type="fading-circle"></mt-spinner>
-    </div>
+        <div>
+          <h1>{{v.title}}</h1>
+          <h5>{{v.original_title}}</h5>
+          <h3>
+            导演：
+            <span v-for="d of v.directors" :key="d.id">{{d.name}}</span>
+          </h3>
+        </div>
+        <div>
+          <mt-badge type="error">10</mt-badge>
+        </div>
+      </section>
+    </mt-loadmore>
   </div>
 </template>
 <script>
-import { Spinner } from 'mint-ui';
-import BScroll from 'better-scroll'
+import { Badge, Indicator, Loadmore } from 'mint-ui';
 import $ from 'axios'
 export default {
-  name: "movielist",
-  props: {
-    movietype: {
-      type: String,
-      required: true
-    }
-  },
+  name: "MovieList",
   data: () => ({
     movielist: [],
-    title: '',
-    scrollId: '',
-    isShowLoading: true
+    allLoaded: false,
+    isShowList: false
   }),
   components: {
-    [Spinner.name]: Spinner
+    [Badge.name]: Badge,
+    [Loadmore.name]: Loadmore
   },
   methods: {
-    genRandom() {
-      return new Date().getTime() + Math.ceil(Math.random() * 1000)
+    loadTop() {
+      $.get('/v2/movie/' + this.movietype + '?start=' + this.start + '&count=2')
+        .then(result => {
+          this.movielist.unshift(...result.data.subjects)
+          this.$refs.loadmore.onTopLoaded()
+          this.start += 2
+        })
+    },
+    loadBottom() {
+      console.log(9);
+      // $.get('/v2/movie/' + this.movietype + '?start=' + this.start + '&count=2')
+      //   .then(result => {
+      //     this.movielist.push(...result.data.subjects)
+      //     this.$refs.loadmore.onBottomLoaded()
+      //     this.start += 2
+      //   })
     }
   },
   mounted() {
+    this.start = 21
+    this.movietype = this.$route.query.uri
+    Indicator.open()
     $.get('/v2/movie/' + this.movietype)
       .then((result) => {
         this.movielist = result.data.subjects
-        this.title = result.data.title
-        this.isShowLoading = false
+        Indicator.close()
+        this.isShowList = true
       })
       .catch(() => {
-        this.isShowLoading = true
-      })
-  },
-  updated() {
 
-  },
-  watch: {
-    isShowLoading() {
-      let hash = this.genRandom()
-      this.scrollId = hash
-
-      // 被动渲染页面，会触发updated钩子
-      // this.$forceUpdate()
-      
-      // nextTick:
-      // 将回调延迟到下次 DOM 更新循环之后执行。
-      // 在修改数据之后立即使用它，然后等待 DOM 更新。
-      // 它跟全局方法 Vue.nextTick 一样，不同的是回调的 this 自动绑定到调用它的实例上。
-      this.$nextTick(function () {
-        new BScroll('#list-scroll-' + this.scrollId, {
-          scrollX: true
-        })
       })
-    }
   }
 }
 </script>
 <style lang="scss" scoped>
-  @import '@/style/usage/core/reset.scss';
-  #scalefont {
-    font-size: 12px;
-    transform: scale(0.86);
-    transform-origin: left;
-  }
-  .list-container {
-    padding: .1rem;
-    background: #fff;
-    margin-top: .2rem;
-    height: 1.9rem;
-    > div {
-      h3 {
-        @extend #scalefont;
+@import '@/style/usage/core/reset.scss';
+.movielist-container {
+  height: 100%;
+  background: #fff;
+  .mint-loadmore {
+    height: 100%;
+    overflow-y: scroll;
+    section {
+      height: 1.04rem;
+      padding: .1rem .2rem;
+      @include flexbox();
+      &:last-child {
+        border: 0;
       }
-      > div {
-        overflow: hidden;
-        figcaption {
-          @extend #scalefont;
-        }
-        figure {
-          width: .9rem;
-          margin: .05rem;
-          figcaption {
-            @include ellipsis();
-          }
-        }
-
-        > div {
-          @include flexbox();
-          width: max-content;
+      div:first-child {
+        width: .7rem;
+        img {
+          width: .64rem;
+          height: .84rem;
         }
       }
-
-      &.spinner {
-        height: 100%;
-        @include flexbox();
-        @include align-items(center);
-        @include justify-content(center);
+      div:nth-child(2) {
+        @include flex();
+        h1 {
+          font-size: .18rem;
+          font-weight: normal;
+          @include ellipsis();
+          margin-bottom: .05rem;
+        }
+        h5 {
+          font-size: .12rem;
+          color: #c0c0c0;
+          font-weight: 100;
+          margin-bottom: .05rem;
+        }
+        h3 {
+          font-size: .14rem;
+          color: #999;
+          font-weight: 100;
+          margin-bottom: .05rem;
+        }
       }
+      div:last-child {
+        width: .35rem;
+      }
+      @include border(0 0 1px 0);
     }
   }
+}
 </style>

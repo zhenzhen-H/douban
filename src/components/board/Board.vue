@@ -32,7 +32,9 @@ export default {
   mounted() {
     // 定义静态属性(state),不会绑定额外的数据
     // 静态属性特点：不去在模板上渲染
-    this.scroll = new BScroll('#board-scroll')
+    this.scroll = new BScroll('#board-scroll', {
+      click: true
+    })
   }
 }
 </script>
